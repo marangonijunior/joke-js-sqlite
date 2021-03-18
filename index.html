@@ -89,6 +89,10 @@ function print(text) {
 function loadJoke () {
     worker.onmessage = function (event) {
 		var results = event.data.results;
+        if (!results) {
+            joke.textContent = "Please load the database.";
+			return;
+		}
         joke.innerHTML = results[0].values[0][0];
 	}
 	worker.postMessage({ action: 'exec', sql: 'SELECT setup FROM jokes ORDER BY RANDOM() LIMIT 1' });
@@ -99,7 +103,7 @@ function execute(commands) {
 	worker.onmessage = function (event) {
 		var results = event.data.results;
 		if (!results) {
-			console.log({message: event.data.error});
+            outputElm.textContent = "Please load the database.";
 			return;
 		}
 
