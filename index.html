@@ -54,12 +54,11 @@
 <h2>Joke - SQLite</h2>
 
 <main>
-    <button id="execute" class="button">Execute</button>
-
+    <label class="button">Load database file: <input type='file' id='dbfile'></label>
     <br>
     <textarea id="commands">SELECT * FROM `jokes`</textarea>
+    <button id="execute" class="button">Execute</button>
 
-    <label class="button">Load database file: <input type='file' id='dbfile'></label>
 
     <pre id="output">Load your db to show the table inside.</pre>
 </main>
@@ -69,6 +68,7 @@
 <button type="button" onclick="loadJoke()">Random Joke</button>
 <h3>Random Joke</h3>
 <p id="joke"></p>
+<p id="punchline"></p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/sql/sql.min.js"></script>
 <script>
@@ -78,6 +78,7 @@ var commandsElm = document.getElementById('commands');
 var outputElm = document.getElementById('output');
 var execBtn = document.getElementById("execute");
 var joke = document.getElementById('joke');
+var punchline = document.getElementById('punchline');
 
 var worker = new Worker("worker.sql-wasm.js");
 worker.postMessage({ action: 'open' });
@@ -94,9 +95,13 @@ function loadJoke () {
 			return;
 		}
         joke.innerHTML = results[0].values[0][0];
+        punchline.innerHTML = results[0].values[0][1];
+
 	}
-	worker.postMessage({ action: 'exec', sql: 'SELECT setup FROM jokes ORDER BY RANDOM() LIMIT 1' });
+	worker.postMessage({ action: 'exec', sql: 'SELECT setup, punchline FROM jokes ORDER BY RANDOM() LIMIT 1' });
 	joke.textContent = "Fetching jokes...";
+    punchline.textContent = "";
+
 }
 
 function execute(commands) {
