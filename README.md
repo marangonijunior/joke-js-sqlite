@@ -1,6 +1,6 @@
 # How to load the page
 
-To run the test you need to execute ' npm install live-server ' to instal globally.
+To run the test you need to execute ' npm install -g live-server ' to instal globally.
 Then you can run the command ' live-server ' on the root path.
 Your browser will open with the page opened.
 
